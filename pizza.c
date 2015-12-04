@@ -110,15 +110,10 @@ int verify_certificate(t_pizza *p, t_part *s)
 
 t_list *add_to_list(t_list *list, t_part *s)
 {
-  if (list == NULL)
-    list = malloc(sizeof(t_list));
-  else
-    {
-      while (list->next != NULL)
-	list = list->next;
-      list->next = malloc(sizeof(t_list));
-      list = list->next;
-    }
+  while (list->next != NULL)
+    list = list->next;
+  list->next = malloc(sizeof(t_list));
+  list = list->next;
   list->s = s;
   list->next = NULL;
   return (list);
@@ -127,6 +122,7 @@ t_list *add_to_list(t_list *list, t_part *s)
 t_list *generate_slices(t_pizza *p)
 {
   t_list	*first;
+  t_list	*prev;
   t_part	*s;
   int		i;
   int		j;
@@ -169,7 +165,30 @@ t_list *generate_slices(t_pizza *p)
 	}
       ++i;
     }
+  prev = first;
+  first = first->next;
+  free(prev);
   return (first);
+}
+
+int is_compatible(t_list *list, t_part *new)
+{
+  while (list != NULL)
+    {
+      if (new->r2 >= list->s->r2 && new->r2 <= list->s->r1 && new->c2 >= list->s->c2 && new->c2 <= list->s->c1)
+	return (0);
+      list = list->next;
+    }
+  return (1);
+}
+
+void display_list(t_list *list)
+{
+  while (list != NULL)
+    {
+      printf("{r1: %d; r2: %d; c1: %d;c2: %d}\n", list->s->r1, list->s->r2, list->s->c1, list->s->c2);
+      list = list->next;
+    }
 }
 
 void free_list(t_list *list)
@@ -185,6 +204,43 @@ void free_list(t_list *list)
     }
 }
 
+void free_tab(t_pizza *p)
+{
+  int	i;
+
+  i = 0;
+  while (i < p->c)
+    free(p->f[i++]);
+  free(p->f);
+}
+
+void print_list(t_list *list)
+{
+  while (list != NULL)
+    {
+      list = list->next;
+    }
+}
+
+t_list *find_solution(t_list *list)
+{
+  t_list	*first;
+  t_list	*prev;
+
+  first = malloc(sizeof(t_list));
+  first->next = NULL;
+  while (list != NULL)
+    {
+      if(is_compatible((first->next == NULL) ? NULL : first->next, list->s) == 1)
+	add_to_list(first, list->s);
+      list = list->next;
+    }
+  prev = first;
+  first = first->next;
+  free(prev);
+  return (first);
+}
+
 int main()
 {
   t_pizza	p;
@@ -192,6 +248,10 @@ int main()
 
   load_file(&p);
   list = generate_slices(&p);
+  //display_list(list);
+  list = find_solution(list);
+  display_list(list);
   free_list(list);
+  free_tab(&p);
   return (0);
 }

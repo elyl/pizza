@@ -1,0 +1,8 @@
+--LHEUREUX Axel
+
+Première version à peu près fonctionelle:
+- Le format de sortie n'est pas bon
+- Les résultats sont au mieux incomplets, au pire completement faux
+
+Utilisation:
+- Le programme va lire le fichier "input_file" et donner une solution pour la decoupe des parts. Si le fichier n'existe pas...le prgramme plantera surement lamentablement.
