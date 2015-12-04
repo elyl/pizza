@@ -1,8 +1,9 @@
 --LHEUREUX Axel
 
-Première version à peu près fonctionelle:
+Version à peu près fonctionelle:
 - Le format de sortie n'est pas bon
-- Les résultats sont au mieux incomplets, au pire completement faux
+- Les résultats sont corrects
+- La liste des parts possibles n'est pas melangee, le programme trouvera toujours la meme solution
 
 Utilisation:
 - Le programme va lire le fichier "input_file" et donner une solution pour la decoupe des parts. Si le fichier n'existe pas...le prgramme plantera surement lamentablement.

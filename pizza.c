@@ -137,14 +137,14 @@ t_list *generate_slices(t_pizza *p)
   while (i < p->r)
     {
       j = 0;
-      while (j < p->r)
+      while (j < p->c)
 	{
 	  i2 = 0;
 	  while (i2 < p->s)
 	    {
 	      j2 = 0;
 	      while (j2 < p->s)
-		{
+		{	  
 		  s = malloc(sizeof(t_part));
 		  s->r1 = i + i2;
 		  s->r2 = i;
@@ -175,8 +175,9 @@ int is_compatible(t_list *list, t_part *new)
 {
   while (list != NULL)
     {
-      if (new->r2 >= list->s->r2 && new->r2 <= list->s->r1 && new->c2 >= list->s->c2 && new->c2 <= list->s->c1)
-	return (0);
+      if ((new->r2 >= list->s->r2 && new->r2 <= list->s->r1) || (new->r1 >= list->s->r2 && new->r1 <= list->s->r1))
+	if ((new->c2 >= list->s->c2 && new->c2 <= list->s->c1) || (new->c1 >= list->s->c2 && new->c1 <= list->s->c1))
+	  return (0);
       list = list->next;
     }
   return (1);
@@ -200,6 +201,18 @@ void free_list(t_list *list)
       prev = list;
       list = list->next;
       free(prev->s);
+      free(prev);
+    }
+}
+
+void free_list2(t_list *list)
+{
+  t_list	*prev;
+
+  while (list != NULL)
+    {
+      prev = list;
+      list = list->next;
       free(prev);
     }
 }
@@ -245,13 +258,14 @@ int main()
 {
   t_pizza	p;
   t_list	*list;
+  t_list	*solution;
 
   load_file(&p);
   list = generate_slices(&p);
-  //display_list(list);
-  list = find_solution(list);
-  display_list(list);
+  solution = find_solution(list);
+  display_list(solution);
   free_list(list);
+  free_list2(solution);
   free_tab(&p);
   return (0);
 }

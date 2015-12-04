@@ -34,6 +34,7 @@ t_list	*find_solution(t_list *list);
 void	load_file(t_pizza *pizza);
 void	write_file();
 void	free_list(t_list *list);
+void	free_list2(t_list *list);
 void	display_list(t_list *list);
 void	free_tab(t_pizza *p);
 void	print_list(t_list *list);
