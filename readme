@@ -1,7 +1,7 @@
 --LHEUREUX Axel
 
 Version à peu près fonctionelle:
-- Le format de sortie n'est pas bon
+- Le format de sortie est correct
 - Les résultats sont corrects
 - La liste des parts possibles n'est pas melangee, le programme trouvera toujours la meme solution
 

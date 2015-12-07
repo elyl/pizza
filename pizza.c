@@ -8,6 +8,8 @@
 #include <ctype.h>
 #include "pizza.h"
 
+static int n;
+
 char *get_next_line(int fd)
 {
   static char	big_buffer[BUFFER_SIZE * 4 + 1] = {0};
@@ -128,12 +130,10 @@ t_list *generate_slices(t_pizza *p)
   int		j;
   int		i2;
   int		j2;
-  int		n;
 
   first = malloc(sizeof(t_list));
   first->next = NULL;
   i = 0;
-  n = 0;
   while (i < p->r)
     {
       j = 0;
@@ -153,10 +153,7 @@ t_list *generate_slices(t_pizza *p)
 		  if (verify_certificate(p, s) != 0)
 		    free(s);
 		  else
-		    {
-		      add_to_list(first, s);
-		      ++n;
-		    }
+		    add_to_list(first, s);
 		  ++j2;
 		}
 	      ++i2;
@@ -185,9 +182,10 @@ int is_compatible(t_list *list, t_part *new)
 
 void display_list(t_list *list)
 {
+  printf("%d\n", n);
   while (list != NULL)
     {
-      printf("{r1: %d; r2: %d; c1: %d;c2: %d}\n", list->s->r1, list->s->r2, list->s->c1, list->s->c2);
+      printf("%d %d %d %d\n", list->s->r1, list->s->c1, list->s->r2, list->s->c2);
       list = list->next;
     }
 }
@@ -224,15 +222,7 @@ void free_tab(t_pizza *p)
   i = 0;
   while (i < p->c)
     free(p->f[i++]);
-  free(p->f);
-}
-
-void print_list(t_list *list)
-{
-  while (list != NULL)
-    {
-      list = list->next;
-    }
+  //free(p->f);
 }
 
 t_list *find_solution(t_list *list)
@@ -240,12 +230,16 @@ t_list *find_solution(t_list *list)
   t_list	*first;
   t_list	*prev;
 
+  n = 0;
   first = malloc(sizeof(t_list));
   first->next = NULL;
   while (list != NULL)
     {
       if(is_compatible((first->next == NULL) ? NULL : first->next, list->s) == 1)
-	add_to_list(first, list->s);
+	{
+	  add_to_list(first, list->s);
+	  ++n;
+	}
       list = list->next;
     }
   prev = first;
@@ -259,6 +253,7 @@ int main()
   t_pizza	p;
   t_list	*list;
   t_list	*solution;
+  int		n;
 
   load_file(&p);
   list = generate_slices(&p);
@@ -266,6 +261,6 @@ int main()
   display_list(solution);
   free_list(list);
   free_list2(solution);
-  free_tab(&p);
+  //free_tab(&p);
   return (0);
 }
